@@ -24,6 +24,6 @@ void PH::collecting(){
     }
     float voltage = this->avgValue*5.0/1024/6;
     //this->pHValue = (float)this->avgValue*5.0/1024/6;
-    this->pHValue = 3.5 * voltage + this->offset;
+    this->pHValue = voltage + this->offset;
     delay(1000);
 }

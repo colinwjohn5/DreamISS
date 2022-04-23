@@ -1,5 +1,4 @@
 #include <Wire.h>
-#include <Filters.h>
 #include <Seismometer.h>
 const int MPU = 0x68; // MPU6050 I2C address
 float AccX, AccY, AccZ;
@@ -7,11 +6,13 @@ float GyroX, GyroY, GyroZ;
 float accAngleX, accAngleY, gyroAngleX, gyroAngleY, gyroAngleZ;
 float roll, pitch, yaw;
 float elapsedTime, currentTime, previousTime;
-FilterOnePole XFHigh(HIGHPASS, 1), YFHigh(HIGHPASS, 1), ZFHigh(HIGHPASS, 1);
+
 
 Seismometer::Seismometer(byte pin) {
     this->pin = pin;
-    this->seismicReading = 0.0;
+    this->roll = 0.0;
+    this->pitch = 0.0;
+    this->yaw = 0.0;
 }
 
 
@@ -26,6 +27,7 @@ void Seismometer::collecting(){
   AccY = (Wire.read() << 8 | Wire.read()) / 16384.0; // Y-axis value
   AccZ = (Wire.read() << 8 | Wire.read()) / 16384.0; // Z-axis value
   // Calculating Roll and Pitch from the accelerometer data
+
   accAngleX = (atan(AccY / sqrt(pow(AccX, 2) + pow(AccZ, 2))) * 180 / PI) - 0.58; // AccErrorX ~(0.58) See the calculate_IMU_error()custom function for more details
   accAngleY = (atan(-1 * AccX / sqrt(pow(AccY, 2) + pow(AccZ, 2))) * 180 / PI) + 1.58; // AccErrorY ~(-1.58)
   previousTime = currentTime;        
@@ -45,16 +47,14 @@ void Seismometer::collecting(){
   gyroAngleX = gyroAngleX + GyroX * elapsedTime; 
   gyroAngleY = gyroAngleY + GyroY * elapsedTime;
   yaw =  yaw + GyroZ * elapsedTime;
+    
   roll = 0.96 * gyroAngleX + 0.04 * accAngleX;
   pitch = 0.96 * gyroAngleY + 0.04 * accAngleY;
 
-  XFHigh.input(roll / 16384.0);
-  YFHigh.input(pitch / 16384.0);
-  ZFHigh.input(yaw / 16384.0 - 1.0);
-  scale_factor = pow(2, trimpot_val / 100.0);
-  xy_vector_mag = sqrt(XFHigh.output() * XFHigh.output() + YFHigh.output() * YFHigh.output()) * scale_factor;
-  z_vector_mag = abs(ZFHigh.output() * scale_factor);
+  this->roll = roll;
+  this->yaw = yaw;
+  this->pitch = pitch;
 
-  this->seismicReading=map(xy_vector_mag,0.00,9.00,0,1024);
+  delay(500);
 
 }

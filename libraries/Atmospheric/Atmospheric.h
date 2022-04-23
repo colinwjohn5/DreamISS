@@ -2,12 +2,15 @@
 #define ATMOSPHERIC_H
 
 #include <Arduino.h>
-#include "SparkFunBME280.h"
+#include <Wire.h>
+#include <SPI.h>
+#include <Adafruit_Sensor.h>
+#include <Adafruit_BME280.h>
 
 class Atmospheric{
     private:
         byte pin;
-        BME280 atmosphericSensor;
+        Adafruit_BME280 bme;
         unsigned long sampleNumber;
     
     public:

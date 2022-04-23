@@ -10,6 +10,8 @@ class Seismometer{
     public:
         Seismometer(byte pin);
         void collecting();
-        long seismicReading;
+        float roll;
+        float pitch;
+        float yaw;
 };
 #endif

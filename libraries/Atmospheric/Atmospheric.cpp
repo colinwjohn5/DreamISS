@@ -1,7 +1,9 @@
 #include "Atmospheric.h"
+#define SEALEVELPRESSURE_HPA (1013.25)
+
+
 
 Atmospheric::Atmospheric() {
-    this->sampleNumber = 0;
     this->tempC = 0.0;
     this->pressure = 0.0;
     this->altitudeM = 0.0;
@@ -9,17 +11,14 @@ Atmospheric::Atmospheric() {
 }
 
 void Atmospheric::collecting(){
-    /**
-    BME280 atmosphericSensor;
-    if (atmosphericSensor.beginI2C() == false) //Begin communication over I2C
-    {
-        Serial.println("The sensor did not respond. Please check wiring.");
-    }
-    **/
-    this->tempC = atmosphericSensor.readTempC();
-    this->pressure = atmosphericSensor.readFloatPressure();
-    this->altitudeM = atmosphericSensor.readFloatAltitudeMeters();
-    this->humidity = atmosphericSensor.readFloatHumidity();
+    unsigned status;
+    
+    // default settings
+    status = bme.begin();  
+    this->tempC = bme.readTemperature();
+    this->pressure =  bme.readPressure() / 100.0F;
+    this->altitudeM = bme.readAltitude(SEALEVELPRESSURE_HPA);
+    this->humidity = bme.readHumidity();
 
     delay(1000);
 }
