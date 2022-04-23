@@ -69,7 +69,9 @@ void call_seismic(){
   seismo.collecting();
   seismic_doc["Sensor"] = F("SEISM");
   seismic_doc["Time"] = (int)(millis()/1000);
-  seismic_doc["Val"] = seismo.seismicReading;
+  seismic_doc["ValR"] = seismo.roll;
+  seismic_doc["ValP"] = seismo.pitch;
+  seismic_doc["ValY"] = seismo.yaw;
   serializeJson(seismic_doc, Serial);
   Serial.println("\n");
 }
@@ -118,7 +120,7 @@ String getValue(String data, char separator, int index)
 void loop() {
 
     String commandInjest = listenForCommand();
-    processCommand("1_STAMP_PH014_ON_1000");
+    processCommand("1_STAMP_ALL_ON_1000");
    
 }
 
@@ -139,7 +141,6 @@ void processCommand(String commandInjest){
   String cmdVal = getValue(commandInjest,'_',3);
   String sampleRate = getValue(commandInjest,'_',4);
   static int runCount = 0;
-  String returnStatus = "";
   runCount++;
 
   long starttime = millis();
