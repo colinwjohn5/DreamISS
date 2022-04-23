@@ -14,7 +14,9 @@
 #include <Adafruit_SleepyDog.h>
 
 const int MPU = 0x68; 
+bool isProd = false;
 
+//String testCommands[6] = {"1_STAMP_ALL_ON_1","1_STAMP_SEISM_ON_1", "1_STAMP_PH_ON_1", "1_STAMP_WFLOW_ON_1", "1_STAMP_TRBID_ON_1","1_STAMP_SAFE_ON_10"};
 
  
 Turbidity turb(A2);
@@ -115,10 +117,9 @@ String getValue(String data, char separator, int index)
 
 void loop() {
 
-  
-  //String commandInjest = listenForCommand();
-  
-  processCommand("1_STAMP_ATMOS_ON_10");  
+    String commandInjest = listenForCommand();
+    processCommand("1_STAMP_PH014_ON_1000");
+   
 }
 
 String listenForCommand(){
@@ -132,7 +133,6 @@ String listenForCommand(){
 
 
 void processCommand(String commandInjest){
-
   String id= getValue(commandInjest,'_',0);
   String timeStamp = getValue(commandInjest,'_',1);
   String sensorName = getValue(commandInjest,'_',2);
@@ -216,7 +216,6 @@ void processCommand(String commandInjest){
       digitalWrite(LED_BUILTIN, HIGH);
       
     }
-    Serial.println("Resuming nominal");
   }
   runCount = runCount+1;
   endtime = millis();

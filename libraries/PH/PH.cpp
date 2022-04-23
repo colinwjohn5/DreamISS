@@ -2,7 +2,7 @@
 
 PH::PH(byte pin) {
     this->pin = pin;
-    this->offset = 0.00;
+    this->offset = 4; //9V ps
 }
 
 void PH::collecting(){
@@ -22,7 +22,8 @@ void PH::collecting(){
     for(int i =2; i<8;i++){
         this->avgValue += this->buffer[i];
     }
-    this->pHValue = (float)this->avgValue*5.0/1024/6;
-    this->pHValue = 3.5*this->pHValue+ this->offset;
+    float voltage = this->avgValue*5.0/1024/6;
+    //this->pHValue = (float)this->avgValue*5.0/1024/6;
+    this->pHValue = 3.5 * voltage + this->offset;
     delay(1000);
 }

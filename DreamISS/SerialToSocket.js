@@ -4,6 +4,8 @@ var webSocket = new WebSocket("wss:websocket.issgroundstation.com/development/")
 const wss = new WebSocket.Server({ port: 8080 });
 var incomingCommand = '';
 
+const myArgs = process.argv.slice(2);
+
 webSocket.onopen = function (event) {
     console.log("OPEN");
   };
@@ -28,7 +30,7 @@ webSocket.onopen = function (event) {
   const parser = port.pipe(new ReadlineParser({ delimiter: '\r\n' }))
   
   let bitsArray = []
-parser.on('data', function(data) {
+  parser.on('data', function(data) {
   var bits = data;
   // add code here
   bitsArray.push(bits)
@@ -36,16 +38,13 @@ parser.on('data', function(data) {
   webSocket.send(bits);
 });
 
-  // Switches the port into "flowing mode"
-  port.on('data', function (data) {
-    //console.log('Data:', data)
+    webSocket.addEventListener('message', function (event) {
+      var commandObject = JSON.parse(event.data);
+      incomingCommand = commandObject.Message;
+      port.write(incomingCommand);
   });
 
-  webSocket.addEventListener('message', function (event) {
-    var commandObject = JSON.parse(event.data);
-    incomingCommand = commandObject.Message;
-    port.write(incomingCommand);
-});
+  
   
   // Pipe the data into another stream (like a parser or standard out)
   
