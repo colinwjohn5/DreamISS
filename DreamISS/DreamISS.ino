@@ -120,7 +120,7 @@ String getValue(String data, char separator, int index)
 void loop() {
 
     String commandInjest = listenForCommand();
-    processCommand("1_STAMP_ALL_ON_1000");
+    processCommand(commandInjest);
    
 }
 
@@ -215,6 +215,7 @@ void processCommand(String commandInjest){
       digitalWrite(LED_BUILTIN, LOW);
       int sleepMS = Watchdog.sleep(sampleRate.toInt()*1000); 
       digitalWrite(LED_BUILTIN, HIGH);
+      Serial.println("Resume nominal");
       
     }
   }

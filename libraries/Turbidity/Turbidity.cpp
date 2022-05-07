@@ -18,7 +18,8 @@ void Turbidity::collecting(){
         this->turbidity = 3000;
     }
     else{
-        this->turbidity = -1120.4*square(this->voltage)+ 5742.3*this->voltage - 4352.9; 
+        this->turbidity = -1120.4*square(this->voltage)+ 5742.3*this->voltage - 4352.9;
+        this->turbidity = this->turbidity / -1000; 
     }
 }
 

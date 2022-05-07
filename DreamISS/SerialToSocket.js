@@ -41,7 +41,10 @@ webSocket.onopen = function (event) {
     webSocket.addEventListener('message', function (event) {
       var commandObject = JSON.parse(event.data);
       incomingCommand = commandObject.Message;
-      port.write(incomingCommand);
+      if(incomingCommand != undefined){
+        port.write(incomingCommand);
+      }
+      
   });
 
   
