@@ -16,7 +16,6 @@
 const int MPU = 0x68; 
 bool isProd = false;
 
-//String testCommands[6] = {"1_STAMP_ALL_ON_1","1_STAMP_SEISM_ON_1", "1_STAMP_PH_ON_1", "1_STAMP_WFLOW_ON_1", "1_STAMP_TRBID_ON_1","1_STAMP_SAFE_ON_10"};
 
  
 Turbidity turb(A2);
